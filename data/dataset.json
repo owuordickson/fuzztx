@@ -4,6 +4,7 @@
     "crossingList": [
         {
             "id": 12,
+            "name": "air humidity",
             "observations": [
                 {
                     "time": "2013-04-18T23:15:20.000Z",
@@ -30,6 +31,7 @@
         },
         {
             "id": 11,
+            "name": "oven temperature",
             "observations": [
                 {
                     "time": "2013-04-18T23:15:20.000Z",

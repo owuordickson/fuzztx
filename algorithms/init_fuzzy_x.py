@@ -8,3 +8,17 @@
 @created: "10 October 2019"
 
 """
+
+from algorithms.fuzz_x import FuzzX
+
+
+def init_algorithm():
+    try:
+        path = '../data/dataset.json'
+        obj = FuzzX(path)
+        print(obj.observation_list)
+    except Exception as error:
+        print(error)
+
+
+init_algorithm()

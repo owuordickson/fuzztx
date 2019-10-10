@@ -8,36 +8,32 @@
 @created: "10 October 2019"
 
 """
-import json
+import csv
 from dateutil.parser import parse
 import time
 
 
-class FuzzX:
+class FuzzX_csv:
 
     def __init__(self, file_path):
-        self.json_data = FuzzX.read_json(file_path)
-        if "crossingList" in self.json_data:
-            # true
-            self.observation_list = self.get_observations()
+        self.raw_data = FuzzX_csv.read_csv(file_path)
+        if len(self.raw_data) == 0:
+            self.data = False
+            print("Data-set error")
+            raise Exception("Unable to read csv file")
         else:
-            raise Exception("Python Error: dataset has no observations")
-
-    def get_observations(self):
-        observations = list()
-        for item in self.json_data["crossingList"]:
-            temp_list = list()
-            for obj in item["observations"]:
-                var_temp = [obj["time"], obj["value"]]
-                temp_list.append(var_temp)
-            observations.append(([item["name"], temp_list]))
-        return observations
+            self.data = self.raw_data
 
     @staticmethod
-    def read_json(file):
+    def read_csv(file):
+        # 1. retrieve data-set from file
         with open(file, 'r') as f:
-            temp_data = json.load(f)
-        return temp_data
+            dialect = csv.Sniffer().sniff(f.readline(), delimiters=";,' '\t")
+            f.seek(0)
+            reader = csv.reader(f, dialect)
+            temp = list(reader)
+            f.close()
+        return temp
 
     @staticmethod
     def test_time(date_str):
