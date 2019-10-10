@@ -20,6 +20,7 @@ class FuzzX:
         if "crossingList" in self.json_data:
             # true
             self.observation_list = self.get_observations()
+            self.x_data = list()
         else:
             raise Exception("Python Error: dataset has no observations")
 
@@ -27,11 +28,17 @@ class FuzzX:
         observations = list()
         for item in self.json_data["crossingList"]:
             temp_list = list()
+            title = ["time", item["name"]]
+            temp_list.append(title)
             for obj in item["observations"]:
                 var_temp = [obj["time"], obj["value"]]
                 temp_list.append(var_temp)
-            observations.append(([item["name"], temp_list]))
+            observations.append(temp_list)
         return observations
+
+    def cross_data(self):
+        x = self.observation_list
+        return False
 
     @staticmethod
     def read_json(file):
