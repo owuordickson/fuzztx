@@ -17,6 +17,7 @@ def init_algorithm():
         path = '../data/dataset.json'
         obj = FuzzX(path)
         print(obj.observation_list)
+        print(obj.time_list)
     except Exception as error:
         print(error)
 
