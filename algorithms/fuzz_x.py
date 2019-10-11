@@ -11,22 +11,58 @@
 import json
 from dateutil.parser import parse
 import time
+import numpy as np
+import skfuzzy as fuzzy
 
 
 class FuzzX:
 
     def __init__(self, file_path):
-        self.json_data = FuzzX.read_json(file_path)
-        if "crossingList" in self.json_data:
+        json_data = FuzzX.read_json(file_path)
+        if "crossingList" in json_data:
             # true
-            self.observation_list, self.time_list = FuzzX.get_observations(self.json_data)
-            self.x_data = list()
+            self.observation_list, self.time_list = FuzzX.get_observations(json_data)
+            self.x_data = self.cross_data()
         else:
             raise Exception("Python Error: dataset has no observations")
 
     def cross_data(self):
-        x = self.observation_list
-        return False
+        raw_data = self.observation_list
+        time_data = self.time_list
+        x_data = list()
+        max_boundaries, extremes = self.build_mf()
+
+        # for each boundary, find times with highest memberships for each dataset
+        # pull their respective columns from the raw_data to form a new combined dataset
+        # remove them from their raw_data, do this until the raw_data is empty
+        # or it does not fit the mf
+        return x_data
+
+    def build_mf(self):
+        min_time = 0
+        max_time = 0
+        max_diff = 0
+        max_boundary = []
+        # list_boundary = list()
+        for item in self.time_list:
+            temp_min, temp_max, min_diff = FuzzX.get_min_diff(item)
+            # boundary = [(temp_min - min_diff), temp_min, (temp_min + min_diff)]
+            # list_boundary.append(boundary)
+            if (max_diff == 0) or (min_diff > max_diff):
+                max_diff = min_diff
+                max_boundary = [(temp_min - min_diff), temp_min, (temp_min + min_diff)]
+            if (min_time == 0) or (temp_min < min_time):
+                min_time = temp_min
+            if (max_time == 0) or (temp_max > max_time):
+                max_time = temp_max
+        extremes = [min_time, max_time, max_diff]
+        return max_boundary, extremes
+
+    @staticmethod
+    def get_min_diff(arr):
+        arr_pop = np.array(arr)
+        arr_diff = np.abs(np.diff(arr_pop))
+        return arr_pop.min(), arr_pop.max(), arr_diff.min()
 
     @staticmethod
     def get_observations(json_data):

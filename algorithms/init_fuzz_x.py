@@ -18,6 +18,7 @@ def init_algorithm():
         obj = FuzzX(path)
         print(obj.observation_list)
         print(obj.time_list)
+        print(obj.build_mf())
     except Exception as error:
         print(error)
 
