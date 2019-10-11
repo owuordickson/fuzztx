@@ -85,7 +85,7 @@ class FuzzX:
             if np.count_nonzero(memberships) > 0:
                 index = memberships.argmax()
                 list_index.append(index)
-                # print(memberships)
+                print(memberships)
             else:
                 return False
         return list_index
