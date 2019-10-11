@@ -22,7 +22,7 @@ class FuzzX:
         if "crossingList" in json_data:
             # true
             self.observation_list, self.time_list = FuzzX.get_observations(json_data)
-            self.x_data = self.cross_data()
+            # self.x_data = self.cross_data()
         else:
             raise Exception("Python Error: dataset has no observations")
 
@@ -30,12 +30,24 @@ class FuzzX:
         raw_data = self.observation_list
         time_data = self.time_list
         x_data = list()
-        max_boundaries, extremes = self.build_mf()
+        boundaries, extremes = self.build_mf()
 
-        # for each boundary, find times with highest memberships for each dataset
-        # pull their respective columns from the raw_data to form a new combined dataset
-        # remove them from their raw_data, do this until the raw_data is empty
-        # or it does not fit the mf
+        while boundaries[1] <= extremes[1]:
+            # while boundary is less than max_time
+            list_index = list()
+            for pop in time_data:
+                # for each boundary, find times with highest memberships for each dataset
+                memberships = fuzzy.membership.trimf(np.array(pop), boundaries)
+                index = memberships.argmax()
+                list_index.append(index)
+            print(list_index)
+            # pull their respective columns from the raw_data to form a new combined dataset
+            # remove them from their raw_data, do this until the raw_data is empty
+            # or it does not fit the mf
+
+            # slide boundary
+            new_bounds = [x+extremes[2] for x in boundaries]
+            boundaries = new_bounds
         return x_data
 
     def build_mf(self):
@@ -56,7 +68,7 @@ class FuzzX:
             if (max_time == 0) or (temp_max > max_time):
                 max_time = temp_max
         extremes = [min_time, max_time, max_diff]
-        return max_boundary, extremes
+        return np.array(max_boundary), extremes
 
     @staticmethod
     def get_min_diff(arr):
