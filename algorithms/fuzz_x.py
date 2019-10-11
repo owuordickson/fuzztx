@@ -22,7 +22,6 @@ class FuzzX:
         if "crossingList" in json_data:
             # true
             self.observation_list, self.time_list = FuzzX.get_observations(json_data)
-            # self.x_data = self.cross_data()
         else:
             raise Exception("Python Error: dataset has no observations")
 
