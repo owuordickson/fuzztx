@@ -34,21 +34,17 @@ class FuzzX:
 
         while boundaries[1] <= extremes[1]:
             # while boundary is less than max_time
-            list_index = list()
-            for pop in time_data:
-                # for each boundary, find times with highest memberships for each dataset
-                memberships = fuzzy.membership.trimf(np.array(pop), boundaries)
-                index = memberships.argmax()
-                list_index.append(index)
-            print(list_index)
-            # pull their respective columns from the raw_data to form a new combined dataset
-            # remove them from their raw_data, do this until the raw_data is empty
-            # or it does not fit the mf
+            list_index = FuzzX.approx_fuzzy_index(time_data, boundaries)
+            if list_index:
+                print(list_index)
+                # pull their respective columns from the raw_data to form a new combined dataset
+                # remove them from their raw_data, do this until the raw_data is empty
+                # or it does not fit the mf
 
             # slide boundary
             new_bounds = [x+extremes[2] for x in boundaries]
             boundaries = new_bounds
-        return x_data
+        return "x_data"
 
     def build_mf(self):
         min_time = 0
@@ -69,6 +65,20 @@ class FuzzX:
                 max_time = temp_max
         extremes = [min_time, max_time, max_diff]
         return np.array(max_boundary), extremes
+
+    @staticmethod
+    def approx_fuzzy_index(all_pop, boundaries):
+        list_index = list()
+        for pop in all_pop:
+            # for each boundary, find times with highest memberships for each dataset
+            memberships = fuzzy.membership.trimf(np.array(pop), boundaries)
+            if np.count_nonzero(memberships) > 0:
+                index = memberships.argmax()
+                list_index.append(index)
+                # print(memberships)
+            else:
+                return False
+        return list_index
 
     @staticmethod
     def get_min_diff(arr):
