@@ -30,21 +30,32 @@ class FuzzX:
         raw_data = self.observation_list
         time_data = self.time_list
         x_data = list()
+        list_index = list()
         boundaries, extremes = self.build_mf()
+
+        temp_tuple = list()
+        temp_tuple.append("timestamp")
+        for item in raw_data:
+            var_title = item[0][1]
+            temp_tuple.append(var_title)
+        x_data.append(temp_tuple)
 
         while boundaries[1] <= extremes[1]:
             # while boundary is less than max_time
-            list_index = FuzzX.approx_fuzzy_index(time_data, boundaries)
-            if list_index:
-                print(list_index)
-                # pull their respective columns from the raw_data to form a new combined dataset
-                # remove them from their raw_data, do this until the raw_data is empty
-                # or it does not fit the mf
+            arr_index = FuzzX.approx_fuzzy_index(time_data, boundaries)
+            if arr_index:
+                print(arr_index)
+                temp_tuple = FuzzX.fetch_x_tuples(boundaries[1], raw_data, arr_index, list_index)
+                if temp_tuple:
+                    x_data.append(temp_tuple)
+                    list_index.append(arr_index)
 
+            # do this until the raw_data is empty or it does not fit the mf
             # slide boundary
             new_bounds = [x+extremes[2] for x in boundaries]
             boundaries = new_bounds
-        return "x_data"
+        print(list_index)
+        return x_data
 
     def build_mf(self):
         min_time = 0
@@ -81,10 +92,39 @@ class FuzzX:
         return list_index
 
     @staticmethod
+    def fetch_x_tuples(time, data, arr_index, list_index):
+        temp_tuple = list()
+        temp_tuple.append(time)
+        for i in range(len(data)):
+            index = (arr_index[i] + 1)
+            # check if index already appears
+            exists = FuzzX.check_index(i, arr_index[i], list_index)
+            if exists:
+                return False
+            # print(exists)
+            # pull their respective columns from raw_data to form a new x_data
+            var_tuple = data[i][index][1]
+            temp_tuple.append(var_tuple)
+        return temp_tuple
+
+    @staticmethod
+    def check_index(i, value, arr_values):
+        for item in arr_values:
+            if item[i] == value:
+                return True
+        return False
+
+    @staticmethod
     def get_min_diff(arr):
         arr_pop = np.array(arr)
         arr_diff = np.abs(np.diff(arr_pop))
         return arr_pop.min(), arr_pop.max(), arr_diff.min()
+
+    @staticmethod
+    def read_json(file):
+        with open(file, 'r') as f:
+            temp_data = json.load(f)
+        return temp_data
 
     @staticmethod
     def get_observations(json_data):
@@ -106,12 +146,6 @@ class FuzzX:
             list_observation.append(temp_observations)
             list_timestamps.append(temp_timestamps)
         return list_observation, list_timestamps
-
-    @staticmethod
-    def read_json(file):
-        with open(file, 'r') as f:
-            temp_data = json.load(f)
-        return temp_data
 
     @staticmethod
     def test_time(date_str):
