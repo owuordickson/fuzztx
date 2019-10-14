@@ -49,7 +49,7 @@ class FuzzX:
             # while boundary is less than max_time
             arr_index = FuzzX.approx_fuzzy_index(time_data, boundaries)
             if arr_index:
-                print(arr_index)
+                # print(arr_index)
                 temp_tuple = FuzzX.fetch_x_tuples(boundaries[1], raw_data, arr_index, list_index)
                 if temp_tuple:
                     x_data.append(temp_tuple)
@@ -59,7 +59,7 @@ class FuzzX:
             # slide boundary
             new_bounds = [x+extremes[2] for x in boundaries]
             boundaries = new_bounds
-        print(list_index)
+        # print(list_index)
         return x_data
 
     def build_mf(self):
@@ -91,7 +91,7 @@ class FuzzX:
             if np.count_nonzero(memberships) > 0:
                 index = memberships.argmax()
                 list_index.append(index)
-                print(memberships)
+                # print(memberships)
             else:
                 return False
         return list_index
