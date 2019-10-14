@@ -21,6 +21,12 @@ class FuzzX:
         json_data = FuzzX.read_json(file_path)
         if "crossingList" in json_data:
             # true
+            self.pattern = json_data["patternType"]
+            self.min_sup = json_data["minSup"]
+            self.steps = json_data["steps"]
+            self.combs = json_data["combs"]
+            self.ref = json_data["c_ref"]
+            self.rep = json_data["m_rep"]
             self.observation_list, self.time_list = FuzzX.get_observations(json_data)
         else:
             raise Exception("Python Error: dataset has no observations")
