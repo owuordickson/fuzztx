@@ -36,7 +36,7 @@ def init_algorithm():
             ac = GradACO(steps, max_combs, d_set)
             list_gp = ac.run_ant_colony(min_supp)
             print("\nPattern : Support")
-            for gp in list_gp:
+            for gp in list_gp[:5]:
                 print(str(gp[1]) + ' : ' + str(gp[0]))
             print("\nPheromone Matrix")
             print(ac.p_matrix)

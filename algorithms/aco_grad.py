@@ -215,6 +215,7 @@ class GradACO:
 
     @staticmethod
     def stringfy_pattern(sols):
+        sols.sort(key=lambda k: (k[0], k[1]), reverse=True)
         list_pat = list()
         for obj in sols:
             sup = obj[0]
