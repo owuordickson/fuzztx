@@ -64,7 +64,7 @@ class GradACO:
         # print("All: "+str(len(all_sols)))
         # print("Winner: "+str(len(win_sols)))
         # print("Losers: "+str(len(loss_sols)))
-        return win_sols
+        return GradACO.stringfy_pattern(win_sols)
 
     def generate_rand_pattern(self):
         p = self.p_matrix
@@ -212,3 +212,14 @@ class GradACO:
             return supp, pattern
         else:
             return 0, unsorted_bins
+
+    @staticmethod
+    def stringfy_pattern(sols):
+        list_pat = list()
+        for obj in sols:
+            sup = obj[0]
+            var_pat = list()
+            for item in obj[1]:
+                var_pat.append((str(item[0]) + str(item[1])))
+            list_pat.append(([sup, var_pat]))
+        return list_pat
