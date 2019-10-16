@@ -127,9 +127,10 @@ class FuzzX:
 
     @staticmethod
     def read_json(file):
-        with open(file, 'r') as f:
+        # temp_data = []
+         with open(file, 'r') as f:
             temp_data = json.load(f)
-        return temp_data
+            return temp_data
 
     @staticmethod
     def get_observations(json_data):

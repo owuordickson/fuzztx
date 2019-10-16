@@ -8,11 +8,13 @@
 @created: "12 July 2019"
 
 """
-
-
 import numpy as np
 import random as rand
 import matplotlib.pyplot as plt
+import pandas
+from itertools import cycle, islice
+from io import BytesIO
+import base64
 
 
 class GradACO:
@@ -64,7 +66,8 @@ class GradACO:
         # print("All: "+str(len(all_sols)))
         # print("Winner: "+str(len(win_sols)))
         # print("Losers: "+str(len(loss_sols)))
-        return GradACO.stringfy_pattern(win_sols)
+        # return GradACO.stringfy_pattern(win_sols)
+        return win_sols
 
     def generate_rand_pattern(self):
         p = self.p_matrix
@@ -150,7 +153,7 @@ class GradACO:
 
     def plot_pheromone_matrix(self):
         x_plot = np.array(self.p_matrix)
-        print(x_plot)
+        # print(x_plot)
         # Figure size (width, height) in inches
         # plt.figure(figsize=(4, 4))
         plt.title("+: increasing; -: decreasing; x: irrelevant")
@@ -171,6 +174,82 @@ class GradACO:
         plt.pcolor(-x_plot, cmap='gray')
         plt.gray()
         plt.grid()
+        plt.show()
+        # fig = BytesIO()
+        # plt.savefig(fig, format='png')
+        # fig.seek(0)  # rewind to beginning of file
+        # figdata_png = base64.b64encode(fig.getvalue())
+        # return fig
+
+    @staticmethod
+    def plot_patterns(list_pattern):
+        num = len(list_pattern)
+        count = 0
+        if num == 1:
+            df = pandas.DataFrame(list_pattern[count][0])
+            my_colors = list(islice(cycle(['b', 'r', 'g', 'y', 'k']), None, len(df)))
+            ax = df.plot(kind='bar', stacked=True, width=1, color=my_colors)
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.spines['bottom'].set_position('center')
+            plt.ylim(-2, 2)
+            plt.xlim(-0.5, len(list_pattern[count][0]))
+            plt.yticks([-1, 1], ['-', '+'])
+            plt.xticks([], [])
+            plt.text(0, 1.8, list_pattern[count][1])
+        elif num == 2:
+            fig, axes = plt.subplots(2)
+            for r in range(2):
+                df = pandas.DataFrame(list_pattern[count][0])
+                my_colors = list(islice(cycle(['b', 'r', 'g', 'y', 'k']), None, len(df)))
+                df.plot(ax=axes[r], kind='bar', stacked=True, width=1, color=my_colors)
+                axes[r].spines['right'].set_visible(False)
+                axes[r].spines['top'].set_visible(False)
+                axes[r].spines['bottom'].set_position('center')
+                # axes[r, c].set_title("support: "+str(count))
+                axes[r].text(0, 1.8, list_pattern[count][1])
+                axes[r].set_xlim([-0.5, len(list_pattern[count][0])])
+                axes[r].set_ylim([-2, 2])
+                count += 1
+            plt.setp(axes, xticks=[], xticklabels=[],
+                     yticks=[-1, 1], yticklabels=['-', '+'])
+        elif num == 3:
+            fig, axes = plt.subplots(2, 2)
+            for r in range(2):
+                for c in range(2):
+                    if count <= 2:
+                        df = pandas.DataFrame(list_pattern[count][0])
+                        my_colors = list(islice(cycle(['b', 'r', 'g', 'y', 'k']), None, len(df)))
+                        df.plot(ax=axes[r, c], kind='bar', stacked=True, width=1, color=my_colors)
+                        axes[r, c].spines['right'].set_visible(False)
+                        axes[r, c].spines['top'].set_visible(False)
+                        axes[r, c].spines['bottom'].set_position('center')
+                        # axes[r, c].set_title("support: "+str(count))
+                        axes[r, c].text(0, 1.8, list_pattern[count][1])
+                        axes[r, c].set_xlim([-0.5, len(list_pattern[count][0])])
+                        axes[r, c].set_ylim([-2, 2])
+                        count += 1
+            plt.setp(axes, xticks=[], xticklabels=[],
+                     yticks=[-1, 1], yticklabels=['-', '+'])
+        elif num == 4:
+            fig, axes = plt.subplots(2, 2)
+            for r in range(2):
+                for c in range(2):
+                    df = pandas.DataFrame(list_pattern[count][0])
+                    my_colors = list(islice(cycle(['b', 'r', 'g', 'y', 'k']), None, len(df)))
+                    df.plot(ax=axes[r, c], kind='bar', stacked=True, width=1, color=my_colors)
+                    axes[r, c].spines['right'].set_visible(False)
+                    axes[r, c].spines['top'].set_visible(False)
+                    axes[r, c].spines['bottom'].set_position('center')
+                    # axes[r, c].set_title("support: "+str(count))
+                    axes[r, c].text(0, 1.8, list_pattern[count][1])
+                    axes[r, c].set_xlim([-0.5, len(list_pattern[count][0])])
+                    axes[r, c].set_ylim([-2, 2])
+                    count += 1
+            plt.setp(axes, xticks=[], xticklabels=[],
+                     yticks=[-1, 1], yticklabels=['-', '+'])
+        else:
+            plt.title("No Patterns Found")
         plt.show()
 
     @staticmethod
@@ -213,14 +292,14 @@ class GradACO:
         else:
             return 0, unsorted_bins
 
-    @staticmethod
-    def stringfy_pattern(sols):
-        sols.sort(key=lambda k: (k[0], k[1]), reverse=True)
-        list_pat = list()
-        for obj in sols:
-            sup = obj[0]
-            var_pat = list()
-            for item in obj[1]:
-                var_pat.append((str(item[0]) + str(item[1])))
-            list_pat.append(([sup, var_pat]))
-        return list_pat
+    # @staticmethod
+    # def stringfy_pattern(sols):
+    #    sols.sort(key=lambda k: (k[0], k[1]), reverse=True)
+    #    list_pat = list()
+    #    for obj in sols:
+    #        sup = obj[0]
+    #        var_pat = list()
+    #        for item in obj[1]:
+    #            var_pat.append((str(item[0]) + str(item[1])))
+    #        list_pat.append(([sup, var_pat]))
+    #    return list_pat
