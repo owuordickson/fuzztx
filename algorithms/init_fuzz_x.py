@@ -52,13 +52,11 @@ def init_algorithm():
                 # print(var_pattern)
                 plot_data = generate_plot_data(d_set.title, pattern)
                 list_pattern.append(([plot_data, "support:"+str(support)]))
-            GradACO.plot_patterns(list_pattern)
-
+            figure = GradACO.plot_patterns(list_pattern)
+            print(figure)
+            # return figure
             # json_response = json.dumps({"attributes": list_attr, "patterns": list_pattern})
             # print(json_response)
-            # ac.plot_pheromone_matrix()
-            # p_data = ac.plot_pheromone_matrix()
-            # print(p_data)
     except Exception as error:
         print(error)
 
