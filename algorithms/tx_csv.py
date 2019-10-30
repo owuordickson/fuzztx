@@ -32,17 +32,6 @@ class FuzzTX:
         # else:
         #    raise Exception("Python Error: dataset has no observations")
 
-    @staticmethod
-    def read_csv(file):
-        # 1. retrieve data-set from file
-        with open(file, 'r') as f:
-            dialect = csv.Sniffer().sniff(f.readline(), delimiters=";,' '\t")
-            f.seek(0)
-            reader = csv.reader(f, dialect)
-            temp = list(reader)
-            f.close()
-        return temp
-
     def cross_data(self):
         raw_data = self.observation_list
         time_data = self.time_list
@@ -176,4 +165,18 @@ class FuzzTX:
                     return True, t_stamp
                 except ValueError:
                     raise ValueError('Python Error: no valid date-time format found')
+
+    @staticmethod
+    def read_csv(file_paths):
+        list_paths = [x.strip() for x in file_paths.split(',')]
+        print(list_paths)
+
+        # 1. retrieve data-set from file
+        '''with open(file, 'r') as f:
+            dialect = csv.Sniffer().sniff(f.readline(), delimiters=";,' '\t")
+            f.seek(0)
+            reader = csv.reader(f, dialect)
+            temp = list(reader)
+            f.close()
+        return temp'''
 
