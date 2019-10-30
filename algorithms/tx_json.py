@@ -108,8 +108,8 @@ class FuzzTX:
                 return False
             # print(exists)
             # pull their respective columns from raw_data to form a new x_data
-            var_tuple = data[i][index][1]
-            temp_tuple.append(var_tuple)
+            var_col = data[i][index][1]
+            temp_tuple.append(var_col)
         return temp_tuple
 
     @staticmethod

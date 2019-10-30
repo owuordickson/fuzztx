@@ -27,21 +27,9 @@ class FuzzTX:
                 raise Exception("CSV Error: "+str(error))
         else:
             raise Exception("Python Error: less than 2 csv files picked")
-        # self.raw_data = FuzzTX.read_csv(file_paths)
-        # if len(self.raw_data) == 0:
-        #    self.data = False
-        #    print("Data-set error")
-        #    raise Exception("Unable to read csv file")
-        # else:
-        #    self.data = self.raw_data
-        # if "crossingList" in json_data:
-            # true
-        #    self.observation_list, self.time_list = FuzzTX.get_observations(json_data)
-        # else:
-        #    raise Exception("Python Error: dataset has no observations")
 
     def cross_data(self):
-        raw_data = self.observation_list
+        raw_data = self.data_streams
         time_data = self.time_list
         x_data = list()
         list_index = list()
@@ -131,8 +119,15 @@ class FuzzTX:
                 return False
             # print(exists)
             # pull their respective columns from raw_data to form a new x_data
-            var_tuple = data[i][index][1]  # edit this to pull more than 1 column, test for time also
-            temp_tuple.append(var_tuple)
+            # pull more than 1 column, test for time also
+            # data[ds][row][col]
+            var_row = data[i][index]
+            for var_col in var_row:
+                is_time, tstamp = FuzzTX.test_time(var_col)
+                if not is_time:
+                    temp_tuple.append(var_col)
+            # var_col = data[i][index][1]
+            # temp_tuple.append(var_col)
         return temp_tuple
 
     @staticmethod
