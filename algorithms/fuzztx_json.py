@@ -8,8 +8,8 @@
 @created: "10 October 2019"
 
 """
-import json
-from algorithms.fuzz_x import FuzzX
+
+from algorithms.tx_json import FuzzX
 from algorithms.init_data import InitData
 from algorithms.aco_grad import GradACO
 
