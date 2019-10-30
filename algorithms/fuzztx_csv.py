@@ -47,6 +47,10 @@ if __name__ == "__main__":
                              # default=None,
                              default='../data/puechabon/puechabon_rainfall.csv,'
                                      '../data/puechabon/puechabon_evapotranspiration.csv,'
+                                     '../data/puechabon/puechabon_global_radiation.csv,'
+                                     '../data/puechabon/puechabon_gross_primary_production_ecosystem_respiration.csv,'
+                                     '../data/puechabon/puechabon_net.csv,'
+                                     '../data/puechabon/puechabon_photosynthetic_active_radiation.csv,'
                                      '../data/puechabon/puechabon_temperature.csv',
                              type='string')
         (options, args) = optparser.parse_args()
