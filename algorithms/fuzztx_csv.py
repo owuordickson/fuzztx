@@ -24,11 +24,11 @@ def init_algorithm(f_paths):
     try:
         obj = FuzzTX(f_paths)
         x_data = obj.cross_data()
-        FuzzTX.write_csv(x_data)
+        # FuzzTX.write_csv(x_data)
         print(obj.f_paths)
         # print(obj.data_streams)
         # print(obj.time_list)
-        print(x_data)
+        # print(x_data)
     except Exception as error:
         print(error)
 
