@@ -24,6 +24,7 @@ def init_algorithm(f_paths):
     try:
         obj = FuzzTX(f_paths)
         x_data = obj.cross_data()
+        FuzzTX.write_csv(x_data)
         print(obj.f_paths)
         # print(obj.data_streams)
         # print(obj.time_list)
@@ -45,6 +46,7 @@ if __name__ == "__main__":
                              help='path to file containing csv',
                              # default=None,
                              default='../data/puechabon/puechabon_rainfall.csv,'
+                                     '../data/puechabon/puechabon_evapotranspiration.csv,'
                                      '../data/puechabon/puechabon_temperature.csv',
                              type='string')
         (options, args) = optparser.parse_args()

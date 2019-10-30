@@ -10,6 +10,7 @@
 """
 import csv
 from dateutil.parser import parse
+from datetime import datetime
 import time
 import numpy as np
 import skfuzzy as fuzzy
@@ -38,8 +39,10 @@ class FuzzTX:
         temp_tuple = list()
         temp_tuple.append("timestamp")
         for item in raw_data:
-            var_title = item[0][1]
-            temp_tuple.append(var_title)
+            row_title = item[0]
+            for i in range(1, len(row_title)):
+                col_name = item[0][i]
+                temp_tuple.append(col_name)
         x_data.append(temp_tuple)
 
         while boundaries[1] <= extremes[1]:
@@ -110,7 +113,7 @@ class FuzzTX:
     @staticmethod
     def fetch_x_tuples(time, data, arr_index, list_index):
         temp_tuple = list()
-        temp_tuple.append(time)
+        temp_tuple.append(str(datetime.fromtimestamp(time)))
         for i in range(len(data)):
             index = (arr_index[i] + 1)
             # check if index already appears
@@ -125,7 +128,10 @@ class FuzzTX:
             for var_col in var_row:
                 is_time, tstamp = FuzzTX.test_time(var_col)
                 if not is_time:
-                    temp_tuple.append(var_col)
+                    if var_col.replace('.','',1).isdigit() or var_col.isdigit():
+                        temp_tuple.append(var_col)
+                    else:
+                        return False
             # var_col = data[i][index][1]
             # temp_tuple.append(var_col)
         return temp_tuple
@@ -203,3 +209,9 @@ class FuzzTX:
             f.close()
         return temp
 
+    @staticmethod
+    def write_csv(csv_data):
+        with open('../data/x_data.csv', 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(csv_data)
+            f.close()
