@@ -21,9 +21,10 @@ def init_algorithm():
         obj = FuzzTX(path)
         # obj = FuzzTX(input_data)
         x_data = obj.cross_data()
-        # print(obj.observation_list)
+        print(obj.time_list)
         # print(x_data)
 
+        '''
         d_set = InitData(x_data)
         if d_set.data:
             steps = obj.steps
@@ -57,6 +58,7 @@ def init_algorithm():
             # return figure
             # json_response = json.dumps({"attributes": list_attr, "patterns": list_pattern})
             # print(json_response)
+            '''
     except Exception as error:
         print(error)
 

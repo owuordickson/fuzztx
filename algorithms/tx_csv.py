@@ -19,13 +19,21 @@ class FuzzTX:
     # allow user to upload multiple csv files
 
     def __init__(self, file_paths):
-        self.raw_data = FuzzTX.read_csv(file_paths)
-        if len(self.raw_data) == 0:
-            self.data = False
-            print("Data-set error")
-            raise Exception("Unable to read csv file")
+        self.f_paths = FuzzTX.test_paths(file_paths)
+        if len(self.f_paths) >= 2:
+            try:
+                self.data_streams, self.time_list = self.get_observations()
+            except Exception as error:
+                raise Exception("CSV Error: "+str(error))
         else:
-            self.data = self.raw_data
+            raise Exception("Python Error: less than 2 csv files picked")
+        # self.raw_data = FuzzTX.read_csv(file_paths)
+        # if len(self.raw_data) == 0:
+        #    self.data = False
+        #    print("Data-set error")
+        #    raise Exception("Unable to read csv file")
+        # else:
+        #    self.data = self.raw_data
         # if "crossingList" in json_data:
             # true
         #    self.observation_list, self.time_list = FuzzTX.get_observations(json_data)
@@ -83,6 +91,20 @@ class FuzzTX:
         extremes = [min_time, max_time, max_diff]
         return np.array(max_boundary), extremes
 
+    def get_observations(self):
+        list_datasteam = FuzzTX.get_datastreams(self.f_paths)
+        list_timestamps = list()
+        for ds in list_datasteam:
+            temp_timestamps = list()
+            for i in range(1, len(ds)):
+                # skip title row
+                var_time = FuzzTX.get_time_col(ds[i])
+                if not var_time:
+                    return False, False
+                temp_timestamps.append(var_time)
+            list_timestamps.append(temp_timestamps)
+        return list_datasteam, list_timestamps
+
     @staticmethod
     def approx_fuzzy_index(all_pop, boundaries):
         list_index = list()
@@ -109,7 +131,7 @@ class FuzzTX:
                 return False
             # print(exists)
             # pull their respective columns from raw_data to form a new x_data
-            var_tuple = data[i][index][1]
+            var_tuple = data[i][index][1]  # edit this to pull more than 1 column, test for time also
             temp_tuple.append(var_tuple)
         return temp_tuple
 
@@ -127,26 +149,27 @@ class FuzzTX:
         return arr_pop.min(), arr_pop.max(), arr_diff.min()
 
     @staticmethod
-    def get_observations(json_data):
-        '''list_observation = list()
-        list_timestamps = list()
-        for item in json_data["crossingList"]:
-            temp_observations = list()
-            temp_timestamps = list()
-            title = ["timestamp", item["name"]]
-            temp_observations.append(title)
-            for obj in item["observations"]:
-                ok, var_time = FuzzTX.test_time(obj["time"])
-                if not ok:
-                    return False, False
-                # var_temp = [obj["time"], obj["value"]]
-                var_temp = [var_time, obj["value"]]
-                temp_observations.append(var_temp)
-                temp_timestamps.append(var_time)
-            list_observation.append(temp_observations)
-            list_timestamps.append(temp_timestamps)
-        return list_observation, list_timestamps'''
-        return True
+    def get_time_col(row):
+        for col_value in row:
+            try:
+                time_ok, t_stamp = FuzzTX.test_time(col_value)
+                if time_ok:
+                    return t_stamp
+            except ValueError:
+                continue
+        return False
+
+    @staticmethod
+    def get_datastreams(paths):
+        list_observation = list()
+        for path in paths:
+            d_stream = FuzzTX.read_csv(path)
+            if len(d_stream) > 1:
+                list_observation.append(d_stream)
+        if len(list_observation) >= 2:
+            return list_observation
+        else:
+            raise Exception("Unable to read one or more CSV files")
 
     @staticmethod
     def test_time(date_str):
@@ -167,16 +190,21 @@ class FuzzTX:
                     raise ValueError('Python Error: no valid date-time format found')
 
     @staticmethod
-    def read_csv(file_paths):
-        list_paths = [x.strip() for x in file_paths.split(',')]
-        print(list_paths)
+    def test_paths(path_str):
+        path_list = [x.strip() for x in path_str.split(',')]
+        for path in path_list:
+            if path == '':
+                path_list.remove(path)
+        return path_list
 
+    @staticmethod
+    def read_csv(file_path):
         # 1. retrieve data-set from file
-        '''with open(file, 'r') as f:
+        with open(file_path, 'r') as f:
             dialect = csv.Sniffer().sniff(f.readline(), delimiters=";,' '\t")
             f.seek(0)
             reader = csv.reader(f, dialect)
             temp = list(reader)
             f.close()
-        return temp'''
+        return temp
 

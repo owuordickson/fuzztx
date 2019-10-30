@@ -19,7 +19,7 @@ class FuzzTX:
 
     def __init__(self, file_path):
         json_data = FuzzTX.read_json(file_path)
-        if "crossingList" in json_data:
+        if "datastreams" in json_data:
             # true
             self.pattern = json_data["patternType"]
             self.min_sup = json_data["minSup"]
@@ -136,7 +136,7 @@ class FuzzTX:
     def get_observations(json_data):
         list_observation = list()
         list_timestamps = list()
-        for item in json_data["crossingList"]:
+        for item in json_data["datastreams"]:
             temp_observations = list()
             temp_timestamps = list()
             title = ["timestamp", item["name"]]

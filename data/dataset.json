@@ -1,7 +1,7 @@
 {
     "minSup": 0.5,
     "patternType": "gradual",
-    "crossingList": [
+    "datastreams": [
         {
             "id": 12,
             "name": "air humidity",
