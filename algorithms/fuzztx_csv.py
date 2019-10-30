@@ -17,12 +17,15 @@ Description:
 """
 import sys
 from optparse import OptionParser
-from algorithms.tx_csv import FuzzXcsv
+from algorithms.tx_csv import FuzzTX
 
 
 def init_algorithm(f_paths):
     try:
-        x_datz = FuzzXcsv(f_paths)
+        obj = FuzzTX(f_paths)
+        x_data = obj.cross_data()
+        # print(obj.observation_list)
+        # print(x_data)
     except Exception as error:
         print(error)
 
@@ -38,8 +41,9 @@ if __name__ == "__main__":
         optparser.add_option('-f', '--inputFile',
                              dest='files',
                              help='path to file containing csv',
-                             default=None,
-                             # default='../data/DATASET.csv',
+                             # default=None,
+                             default='../data/puechabon/puechabon_rainfall.csv,'
+                                     '../data/puechabon/puechabon_temperature.csv',
                              type='string')
         (options, args) = optparser.parse_args()
 

@@ -9,7 +9,7 @@
 
 """
 
-from algorithms.tx_json import FuzzX
+from algorithms.tx_json import FuzzTX
 from algorithms.init_data import InitData
 from algorithms.aco_grad import GradACO
 
@@ -18,8 +18,8 @@ def init_algorithm():
     try:
         # input_data = get_sample_data()
         path = '../data/dataset.json'
-        obj = FuzzX(path)
-        # obj = FuzzX(input_data)
+        obj = FuzzTX(path)
+        # obj = FuzzTX(input_data)
         x_data = obj.cross_data()
         # print(obj.observation_list)
         # print(x_data)
