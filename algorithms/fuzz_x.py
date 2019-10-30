@@ -36,7 +36,7 @@ class FuzzX:
         time_data = self.time_list
         x_data = list()
         list_index = list()
-        boundaries, extremes = self.build_mf()
+        boundaries, extremes = self.get_boundaries()
 
         temp_tuple = list()
         temp_tuple.append("timestamp")
@@ -62,7 +62,7 @@ class FuzzX:
         # print(list_index)
         return x_data
 
-    def build_mf(self):
+    def get_boundaries(self):
         min_time = 0
         max_time = 0
         max_diff = 0

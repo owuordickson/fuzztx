@@ -1,0 +1,14 @@
+"Parameter description"
+file_name;file_description;file_column;unit;graph_parameter;parameter_description;data_level_description;contact
+puechabon_temperature;	Air and soil temperature	;puechabon_air_temperature_average;°C;	Air temperature	;	Monthly average	;	Validated data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_temperature;	Air and soil temperature	;puechabon_soil_temperature;°C;	Soil temperature	;	Monthly average temperature	;	Validated data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_photosynthetic_active_radiation;	Photosyntetic active radiation	;puechabon_photosynthetic_active_radiation;mol.m-2;	Photosynthetic active radiation	;;	Validated data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_rainfall;Rainfall;puechabon_rainfall;mm;Rainfall;;	Calculated data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_global_radiation;	Global radiation	;puechabon_global_radiation;MJ.m-2;	Global radiation	;;	Validated data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_net;	Net ecosystem exchange	;puechabon_net;gC/m2;	Net ecosystem exchange	;	Measurement from the flux tower	;	Validated and gap-filled data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_evapotranspiration;	Evapo transpiration	;puechabon_evapotranspiration;mm;	Evapo transpiration	;	Measurement from the flux tower	;	Validated and gap-filled data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_gross_primary_production_ecosystem_respiration;	Gross primary production and ecosystem respiration	;puechabon_gross_primary_production;gC/m2;	Gross primary production	;	Measurement from the flux tower	;	Validated and gap-filled data	;	jean-marc.ourcival@cefe.cnrs.fr			
+puechabon_gross_primary_production_ecosystem_respiration;	Gross primary production and ecosystem respiration	;puechabon_ecosystem_respiration;gC/m2;	Ecosystem respiration	;	Measurement from the flux tower	;	Validated and gap-filled data	;	jean-marc.ourcival@cefe.cnrs.fr			
+
+station_name;station_description;station_latitude;station_longitude;station_altitude
+	Site expérimental de Puechabon	;;43.7414;3.5958;
