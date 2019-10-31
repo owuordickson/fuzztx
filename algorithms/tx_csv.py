@@ -19,7 +19,8 @@ import skfuzzy as fuzzy
 class FuzzTX:
     # allow user to upload multiple csv files
 
-    def __init__(self, file_paths):
+    def __init__(self, allow_char, file_paths):
+        self.allow_char = allow_char
         self.f_paths = FuzzTX.test_paths(file_paths)
         if len(self.f_paths) >= 2:
             try:
@@ -50,7 +51,7 @@ class FuzzTX:
             arr_index = FuzzTX.approx_fuzzy_index(time_data, boundaries)
             if arr_index:
                 # print(arr_index)
-                temp_tuple = FuzzTX.fetch_x_tuples(boundaries[1], raw_data, arr_index, list_index)
+                temp_tuple = self.fetch_x_tuples(boundaries[1], arr_index, list_index)
                 if temp_tuple:
                     x_data.append(temp_tuple)
                     list_index.append(arr_index)
@@ -96,22 +97,8 @@ class FuzzTX:
             list_timestamps.append(temp_timestamps)
         return list_datasteam, list_timestamps
 
-    @staticmethod
-    def approx_fuzzy_index(all_pop, boundaries):
-        list_index = list()
-        for pop in all_pop:
-            # for each boundary, find times with highest memberships for each dataset
-            memberships = fuzzy.membership.trimf(np.array(pop), boundaries)
-            if np.count_nonzero(memberships) > 0:
-                index = memberships.argmax()
-                list_index.append(index)
-                # print(memberships)
-            else:
-                return False
-        return list_index
-
-    @staticmethod
-    def fetch_x_tuples(time, data, arr_index, list_index):
+    def fetch_x_tuples(self, time, arr_index, list_index):
+        data = self.data_streams
         temp_tuple = list()
         temp_tuple.append(str(datetime.fromtimestamp(time)))
         for i in range(len(data)):
@@ -128,13 +115,30 @@ class FuzzTX:
             for var_col in var_row:
                 is_time, tstamp = FuzzTX.test_time(var_col)
                 if not is_time:
-                    if var_col.replace('.','',1).isdigit() or var_col.isdigit():
-                        temp_tuple.append(var_col)
+                    if self.allow_char == 0:
+                        if var_col.replace('.','',1).isdigit() or var_col.isdigit():
+                            temp_tuple.append(var_col)
+                        else:
+                            return False
                     else:
-                        return False
+                        temp_tuple.append(var_col)
             # var_col = data[i][index][1]
             # temp_tuple.append(var_col)
         return temp_tuple
+
+    @staticmethod
+    def approx_fuzzy_index(all_pop, boundaries):
+        list_index = list()
+        for pop in all_pop:
+            # for each boundary, find times with highest memberships for each dataset
+            memberships = fuzzy.membership.trimf(np.array(pop), boundaries)
+            if np.count_nonzero(memberships) > 0:
+                index = memberships.argmax()
+                list_index.append(index)
+                # print(memberships)
+            else:
+                return False
+        return list_index
 
     @staticmethod
     def check_index(i, value, arr_values):

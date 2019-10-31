@@ -9,7 +9,7 @@
 @modified: "30 October 2019"
 
 Usage:
-    $python fuzztx_csv.py -f file1.csv,file2.csv,file3.csv
+    $python fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv
 
 Description:
     f -> file paths to csv files
@@ -20,15 +20,15 @@ from optparse import OptionParser
 from algorithms.tx_csv import FuzzTX
 
 
-def init_algorithm(f_paths):
+def init_algorithm(allow_char, f_paths):
     try:
-        obj = FuzzTX(f_paths)
+        obj = FuzzTX(allow_char, f_paths)
         x_data = obj.cross_data()
         # FuzzTX.write_csv(x_data)
         print(obj.f_paths)
         # print(obj.data_streams)
         # print(obj.time_list)
-        # print(x_data)
+        print(x_data)
     except Exception as error:
         print(error)
 
@@ -38,9 +38,15 @@ def init_algorithm(f_paths):
 
 if __name__ == "__main__":
     if not sys.argv:
-        filePaths = sys.argv[1]
+        allowChar = sys.argv[1]
+        filePaths = sys.argv[2]
     else:
         optparser = OptionParser()
+        optparser.add_option('-a', '--allowChar',
+                             dest='allowChar',
+                             help='allow crossing of non-numeric columns',
+                             default=0,
+                             type='int')
         optparser.add_option('-f', '--inputFile',
                              dest='files',
                              help='path to file containing csv',
@@ -56,13 +62,14 @@ if __name__ == "__main__":
         (options, args) = optparser.parse_args()
 
         if options.files is None:
-            print("Usage: $python fuzztx_csv.py -f file1.csv,file2.csv,file3.csv ")
+            print("Usage: $python fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv ")
             sys.exit('System will exit')
         else:
             filePaths = options.files
+            allowChar = options.allowChar
 
     import time
     start = time.time()
-    init_algorithm(filePaths)
+    init_algorithm(allowChar, filePaths)
     end = time.time()
     print("\n"+str(end-start)+" seconds")
