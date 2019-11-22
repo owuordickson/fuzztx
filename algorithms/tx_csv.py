@@ -113,7 +113,10 @@ class FuzzTX:
             # data[ds][row][col]
             var_row = data[i][index]
             for var_col in var_row:
-                is_time, tstamp = FuzzTX.test_time(var_col)
+                try:
+                    is_time, tstamp = FuzzTX.test_time(var_col)
+                except ValueError as e:
+                    is_time = False
                 if not is_time:
                     if self.allow_char == 0:
                         if var_col.replace('.','',1).isdigit() or var_col.isdigit():
@@ -151,7 +154,8 @@ class FuzzTX:
     def get_min_diff(arr):
         arr_pop = np.array(arr)
         arr_diff = np.abs(np.diff(arr_pop))
-        return arr_pop.min(), arr_pop.max(), arr_diff.min()
+        no_zeros = np.argwhere(arr_diff)
+        return arr_pop.min(), arr_pop.max(), no_zeros.min()
 
     @staticmethod
     def get_time_col(row):
