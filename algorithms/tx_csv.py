@@ -33,18 +33,41 @@ class FuzzTX:
     def cross_data(self):
         raw_data = self.data_streams
         time_data = self.time_list
+        digit_cols = list()
         x_data = list()
         list_index = list()
         boundaries, extremes = self.get_boundaries()
 
+        j = 1
         temp_tuple = list()
         temp_tuple.append("timestamp")
+        digit_cols.append(0)
         for item in raw_data:
             row_title = item[0]
+            first_row = item[1]
             for i in range(1, len(row_title)):
-                col_name = item[0][i]
-                temp_tuple.append(col_name)
-        x_data.append(temp_tuple)
+                # ignore date-time column (already added above)
+                col_name = row_title[i]
+                var_col = first_row[i]
+
+                try:
+                    is_time, tstamp = FuzzTX.test_time(var_col)
+                except ValueError as e:
+                    is_time = False
+                if not is_time:
+                    temp_tuple.append(col_name)
+                    if var_col.replace('.', '', 1).isdigit() or var_col.isdigit():
+                        digit_cols.append(j)
+                    j += 1
+        new_tuple = list()
+        for k in range(len(temp_tuple)):
+            if self.allow_char == 0:
+                if k in digit_cols:
+                    new_tuple.append(temp_tuple[k])
+            else:
+                new_tuple.append(temp_tuple[k])
+        x_data.append(new_tuple)
+        # print(len(new_tuple))
 
         while boundaries[1] <= extremes[1]:
             # while boundary is less than max_time
@@ -53,9 +76,18 @@ class FuzzTX:
                 # print(arr_index)
                 temp_tuple = self.fetch_x_tuples(boundaries[1], arr_index, list_index)
                 if temp_tuple:
-                    x_data.append(temp_tuple)
+                    # print(temp_tuple)
+                    new_tuple = list()
+                    for k in range(len(temp_tuple)):
+                        # if k not in time_cols:  # remove time cols
+                        if self.allow_char == 0:
+                            if k in digit_cols:
+                                new_tuple.append(temp_tuple[k])
+                        else:
+                            new_tuple.append(temp_tuple[k])
+                    x_data.append(new_tuple)
                     list_index.append(arr_index)
-
+                    # print(len(new_tuple))
             # do this until the raw_data is empty or it does not fit the mf
             # slide boundary
             new_bounds = [x+extremes[2] for x in boundaries]
@@ -118,13 +150,14 @@ class FuzzTX:
                 except ValueError as e:
                     is_time = False
                 if not is_time:
-                    if self.allow_char == 0:
-                        if var_col.replace('.','',1).isdigit() or var_col.isdigit():
-                            temp_tuple.append(var_col)
-                        else:
-                            return False
-                    else:
-                        temp_tuple.append(var_col)
+                    temp_tuple.append(var_col)
+                    # if self.allow_char == 0:
+                    #    if var_col.replace('.','',1).isdigit() or var_col.isdigit():
+                    #        temp_tuple.append(var_col)
+                        # else:
+                        #    return False
+                #    else:
+                #        temp_tuple.append(var_col)
             # var_col = data[i][index][1]
             # temp_tuple.append(var_col)
         return temp_tuple

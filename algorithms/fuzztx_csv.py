@@ -52,7 +52,7 @@ if __name__ == "__main__":
                              help='path to file containing csv',
                              # default=None,
                              default='../data/oreme/GPS.csv,'
-                             #        '../data/oreme/Directio.csv,'
+                                     # '../data/oreme/Directio.csv,'
                                      '../data/oreme/Omnidir.csv',
                              # default='../data/puechabon/puechabon_rainfall.csv,'
                              #        '../data/puechabon/puechabon_evapotranspiration.csv,'
