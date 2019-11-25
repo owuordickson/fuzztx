@@ -15,10 +15,10 @@ import numpy as np
 import skfuzzy as fuzzy
 
 
-class FuzzTX:
+class FuzzTXj:
 
     def __init__(self, file_path):
-        json_data = FuzzTX.read_json(file_path)
+        json_data = FuzzTXj.read_json(file_path)
         if "datastreams" in json_data:
             # true
             self.pattern = json_data["patternType"]
@@ -27,7 +27,7 @@ class FuzzTX:
             self.combs = json_data["combs"]
             self.ref = json_data["c_ref"]
             self.rep = json_data["m_rep"]
-            self.observation_list, self.time_list = FuzzTX.get_observations(json_data)
+            self.observation_list, self.time_list = FuzzTXj.get_observations(json_data)
         else:
             raise Exception("Python Error: dataset has no observations")
 
@@ -47,10 +47,10 @@ class FuzzTX:
 
         while boundaries[1] <= extremes[1]:
             # while boundary is less than max_time
-            arr_index = FuzzTX.approx_fuzzy_index(time_data, boundaries)
+            arr_index = FuzzTXj.approx_fuzzy_index(time_data, boundaries)
             if arr_index:
                 # print(arr_index)
-                temp_tuple = FuzzTX.fetch_x_tuples(boundaries[1], raw_data, arr_index, list_index)
+                temp_tuple = FuzzTXj.fetch_x_tuples(boundaries[1], raw_data, arr_index, list_index)
                 if temp_tuple:
                     x_data.append(temp_tuple)
                     list_index.append(arr_index)
@@ -69,7 +69,7 @@ class FuzzTX:
         max_boundary = []
         # list_boundary = list()
         for item in self.time_list:
-            temp_min, temp_max, min_diff = FuzzTX.get_min_diff(item)
+            temp_min, temp_max, min_diff = FuzzTXj.get_min_diff(item)
             # boundary = [(temp_min - min_diff), temp_min, (temp_min + min_diff)]
             # list_boundary.append(boundary)
             if (max_diff == 0) or (min_diff > max_diff):
@@ -103,7 +103,7 @@ class FuzzTX:
         for i in range(len(data)):
             index = (arr_index[i] + 1)
             # check if index already appears
-            exists = FuzzTX.check_index(i, arr_index[i], list_index)
+            exists = FuzzTXj.check_index(i, arr_index[i], list_index)
             if exists:
                 return False
             # print(exists)
@@ -142,7 +142,7 @@ class FuzzTX:
             title = ["timestamp", item["name"]]
             temp_observations.append(title)
             for obj in item["observations"]:
-                ok, var_time = FuzzTX.test_time(obj["time"])
+                ok, var_time = FuzzTXj.test_time(obj["time"])
                 if not ok:
                     return False, False
                 # var_temp = [obj["time"], obj["value"]]

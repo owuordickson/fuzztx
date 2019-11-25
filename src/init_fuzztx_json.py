@@ -9,22 +9,20 @@
 
 """
 
-from algorithms.tx_json import FuzzTX
-from algorithms.init_data import InitData
-from algorithms.aco_grad import GradACO
+from src import FuzzTXj, HandleData, GradACO
 
 
 def init_algorithm():
     try:
         # input_data = get_sample_data()
         path = '../data/dataset.json'
-        obj = FuzzTX(path)
-        # obj = FuzzTX(input_data)
+        obj = FuzzTXj(path)
+        # obj = FuzzTXj(input_data)
         x_data = obj.cross_data()
         # print(obj.observation_list)
         # print(x_data)
 
-        d_set = InitData(x_data)
+        d_set = HandleData(x_data)
         if d_set.data:
             steps = obj.steps
             max_combs = obj.combs

@@ -12,7 +12,7 @@
 import numpy as np
 
 
-class InitData:
+class HandleData:
 
     def __init__(self, raw_data):
         self.raw_data = raw_data
@@ -53,7 +53,7 @@ class InitData:
 
     def get_attributes(self):
         attr = []
-        time_cols = InitData.get_time_cols()
+        time_cols = HandleData.get_time_cols()
         for i in range(len(self.title)):
             temp_attr = self.title[i]
             indx = int(temp_attr[0])
@@ -69,7 +69,7 @@ class InitData:
         self.equal = eq
         temp = self.data
         cols = self.column_size
-        time_cols = InitData.get_time_cols()
+        time_cols = HandleData.get_time_cols()
         for col in range(cols):
             if len(time_cols) > 0 and (col in time_cols):
                 # exclude date-time column
