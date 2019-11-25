@@ -9,7 +9,7 @@
 @modified: "30 October 2019"
 
 Usage:
-    $python fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv
+    $python init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv
 
 Description:
     f -> file paths to csv files
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         (options, args) = optparser.parse_args()
 
         if options.files is None:
-            print("Usage: $python fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv ")
+            print("Usage: $python init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv ")
             sys.exit('System will exit')
         else:
             filePaths = options.files
