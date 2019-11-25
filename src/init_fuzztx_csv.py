@@ -46,7 +46,7 @@ if __name__ == "__main__":
         optparser.add_option('-a', '--allowChar',
                              dest='allowChar',
                              help='allow crossing of non-numeric columns',
-                             default=1,
+                             default=0,
                              type='int')
         optparser.add_option('-f', '--inputFile',
                              dest='files',
