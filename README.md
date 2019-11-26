@@ -25,7 +25,7 @@ where you specify the input parameters as follows:<br>
 * <strong>files.csv</strong> - [required] files in csv format separated by commas<br>
 * <strong>allowChar</strong> - [optional] allow characters ```default = 0``` <br>
 
-For example we executed the <em><strong>FuzzTX</strong></em> algorithm with a sample data-set<br>
+For example we executed the <em><strong>FuzzTX</strong></em> algorithm on sample data-sets<br>
 ```
 $python3 init_fuzztx_csv.py -a 0 -f '../data/oreme/GPS.csv,../data/oreme/Omnidir.csv'
 ```
