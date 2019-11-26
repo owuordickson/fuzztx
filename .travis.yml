@@ -9,4 +9,4 @@ before_install:
 
 install: pip3 install -r requirements.txt
 
-script: python3 src/init_fuzztx_csv.py -a 0 -f '..data/oreme/GPS.csv,..data/oreme/Omnidir.csv'
+script: python3 src/init_fuzztx_csv.py -a 0 -f 'data/oreme/GPS.csv,data/oreme/Omnidir.csv'
