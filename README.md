@@ -23,7 +23,7 @@ $python3 init_fuzztx_csv.py -a allowChar -f 'file1.csv,file2.csv,file3.csv'
 ```
 where you specify the input parameters as follows:<br>
 * <strong>files.csv</strong> - [required] files in csv format separated by commas<br>
-* <strong>allowChar</strong> - [optional] allow characters ```default = 0``` <br>
+* <strong>allowChar</strong> - [optional] allow characters ```default = 0```. If set to 1, the algorithm will cross all columns including those that have non-numeric values.<br>
 
 For example we executed the <em><strong>FuzzTX</strong></em> algorithm on sample data-sets<br>
 ```
