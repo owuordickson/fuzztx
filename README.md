@@ -31,7 +31,7 @@ $python3 init_fuzztx_csv.py -a 0 -f '../data/oreme/GPS.csv,../data/oreme/Omnidir
 ```
 
 <strong>Output</strong><br>
-The output should be a generated csv file (x_data.csv). For purposes of demonstration, we display the contents (as a nested array) below
+The output should be a generated csv file <strong>(x_data.csv)</strong>. For purposes of demonstration, we display the contents (as a nested array) below
 ```
 [
     ['timestamp', 'id_site', 'v1', 'v2', 'id_site', 'Rx', 'Hmax', 'Thmax', 'H1/3', 'Th1/3', 'Hmoy', 'Tmoy', 'Cambrure', 'Nb_Vagues'], 
