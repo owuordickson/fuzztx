@@ -25,7 +25,7 @@ def init_algorithm(allow_char, f_paths):
     try:
         obj = FuzzTX(allow_char, f_paths)
         x_data = obj.cross_data()
-        # FuzzTXj.write_csv(x_data)
+        # FuzzTX.write_csv(x_data)
         print(obj.f_paths)
         # print(obj.data_streams)
         # print(obj.time_list)
