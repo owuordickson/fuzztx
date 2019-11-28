@@ -1,0 +1,6 @@
+Run-time: 0.06345701217651367 seconds
+Algorithm: FuzzTX 
+Number of cores: 1
+
+
+Files: ../data/oreme/GPS.csv,../data/oreme/Omnidir.csv

@@ -9,7 +9,7 @@
 @modified: "30 October 2019"
 
 Usage:
-    $python3 init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv
+    $python3 init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv -c 4
 
 Description:
     f -> file paths to csv files
@@ -21,15 +21,19 @@ from optparse import OptionParser
 from algorithms.tx_csv import FuzzTX
 
 
-def init_algorithm(allow_char, f_paths):
+def init_algorithm(allow_char, f_paths, cores):
     try:
         obj = FuzzTX(allow_char, f_paths)
         x_data = obj.cross_data()
-        # FuzzTX.write_csv(x_data)
-        print(obj.f_paths)
+        FuzzTX.write_csv(x_data)
         # print(obj.data_streams)
         # print(obj.time_list)
-        print(x_data)
+        # print(x_data)
+
+        wr_line = "Algorithm: FuzzTX \n"
+        wr_line += ("Number of cores: " + str(cores) + '\n\n')
+        wr_line += ("\nFiles: " + f_paths + '\n')
+        return wr_line
     except Exception as error:
         print(error)
 
@@ -41,6 +45,7 @@ if __name__ == "__main__":
     if not sys.argv:
         allowChar = sys.argv[1]
         filePaths = sys.argv[2]
+        numCores = sys.argv[3]
     else:
         optparser = OptionParser()
         optparser.add_option('-a', '--allowChar',
@@ -63,17 +68,28 @@ if __name__ == "__main__":
                              #        '../data/puechabon/puechabon_photosynthetic_active_radiation.csv,'
                              #        '../data/puechabon/puechabon_temperature.csv',
                              type='string')
+        optparser.add_option('-c', '--coresCount',
+                             dest='numCores',
+                             help='number of cores',
+                             default=1,
+                             type='int')
         (options, args) = optparser.parse_args()
 
         if options.files is None:
-            print("Usage: $python3 init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv ")
+            print("Usage: $python3 init_fuzztx_csv.py -a 0 -f file1.csv,file2.csv,file3.csv -c 4")
             sys.exit('System will exit')
         else:
             filePaths = options.files
             allowChar = options.allowChar
+            numCores = options.numCores
 
     import time
     start = time.time()
-    init_algorithm(allowChar, filePaths)
+    res_text = init_algorithm(allowChar, filePaths, numCores)
     end = time.time()
-    print("\n"+str(end-start)+" seconds")
+
+    wr_text = ("Run-time: " + str(end - start) + " seconds\n")
+    wr_text += str(res_text)
+    f_name = ('res_x' + str(end).replace('.', '', 1) + '.txt')
+    FuzzTX.write_file(wr_text, '../data/' + f_name)
+    print(wr_text)
