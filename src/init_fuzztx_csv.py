@@ -35,7 +35,9 @@ def init_algorithm(allow_char, f_paths, cores):
         wr_line += ("\nFiles: " + f_paths + '\n')
         return wr_line
     except Exception as error:
+        wr_line = "Failed: " + str(error)
         print(error)
+        return wr_line
 
 
 # ------------------------- main method ---------------------------------------------
