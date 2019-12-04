@@ -251,8 +251,8 @@ class FuzzTX:
         return temp
 
     @staticmethod
-    def write_csv(csv_data):
-        with open('x_data.csv', 'w') as f:
+    def write_csv(csv_data, path='x_data.csv'):
+        with open(path, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(csv_data)
             f.close()
