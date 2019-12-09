@@ -25,12 +25,14 @@ class FuzzTX:
         if len(self.f_paths) >= 2:
             try:
                 self.data_streams, self.time_list = self.get_observations()
+                print("data streams fetched")
             except Exception as error:
                 raise Exception("CSV Error: "+str(error))
         else:
             raise Exception("Python Error: less than 2 csv files picked")
 
     def cross_data(self):
+        print("starting crossing")
         raw_data = self.data_streams
         time_data = self.time_list
         digit_cols = list()
@@ -93,6 +95,7 @@ class FuzzTX:
             new_bounds = [x+extremes[2] for x in boundaries]
             boundaries = new_bounds
         # print(list_index)
+        print("finished crossing")
         return x_data
 
     def get_boundaries(self):

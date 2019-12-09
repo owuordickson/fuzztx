@@ -17,7 +17,8 @@ Description:
 """
 import sys
 from optparse import OptionParser
-# from src import FuzzTX
+# from src import FuzzTX, InitParallel
+from algorithms.multiprocess import InitParallel
 from algorithms.tx_csv import FuzzTX
 
 
@@ -29,9 +30,14 @@ def init_algorithm(allow_char, f_paths, cores):
         # print(obj.data_streams)
         # print(obj.time_list)
         # print(x_data)
+        if cores > 1:
+            num_cores = cores
+        else:
+            num_cores = InitParallel.get_num_cores()
+        print(num_cores)
 
         wr_line = "Algorithm: FuzzTX \n"
-        wr_line += ("Number of cores: " + str(cores) + '\n\n')
+        wr_line += ("Number of cores: " + str(num_cores) + '\n\n')
         wr_line += ("\nFiles: " + f_paths + '\n')
         return wr_line
     except Exception as error:
