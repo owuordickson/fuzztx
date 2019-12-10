@@ -17,25 +17,19 @@ Description:
 """
 import sys
 from optparse import OptionParser
-# from src import FuzzTX, InitParallel
-from algorithms.datastream.multiprocess import InitParallel
+# from src import FuzzTX
 from algorithms.tx_csv import FuzzTX
 
 
 def init_algorithm(allow_char, f_paths, cores):
     try:
-        obj = FuzzTX(allow_char, f_paths)
+        obj = FuzzTX(f_paths, allow_char, cores)
         x_data = obj.cross_data()
         FuzzTX.write_csv(x_data)
         # print(x_data)
 
-        if cores > 1:
-            num_cores = cores
-        else:
-            num_cores = InitParallel.get_num_cores()
-
         wr_line = "Algorithm: FuzzTX \n"
-        wr_line += ("Number of cores: " + str(num_cores) + '\n\n')
+        wr_line += ("Number of cores: " + str(obj.cores) + '\n\n')
         wr_line += ("\nFiles: " + f_paths + '\n')
         return wr_line
     except Exception as error:
