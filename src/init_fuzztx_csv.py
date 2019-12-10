@@ -29,6 +29,8 @@ def init_algorithm(allow_char, f_paths, cores):
         # print(x_data)
 
         wr_line = "Algorithm: FuzzTX \n"
+        wr_line += "No. of (crossed data) attributes: " + str(len(x_data[0])) + '\n'
+        wr_line += "No. of (crossed data) tuples: " + str(len(x_data)) + '\n'
         wr_line += ("Number of cores: " + str(obj.cores) + '\n\n')
         wr_line += ("\nFiles: " + f_paths + '\n')
         return wr_line
