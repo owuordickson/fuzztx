@@ -3,12 +3,13 @@
 import sys
 from optparse import OptionParser
 from algorithms.tx_csv import FuzzTX
+from algorithms.datastream.datastream import DataStream
 
 
 def fetch_site(path, site_id, name):
     try:
         new_data = list()
-        raw_data = FuzzTX.read_csv(path)
+        raw_data = DataStream.read_csv(path)
         size = len(raw_data)
 
         title = []
