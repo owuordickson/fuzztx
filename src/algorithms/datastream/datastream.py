@@ -27,7 +27,8 @@ class DataStream:
         else:
             self.data = self.raw_data
             self.titles = self.get_titles()
-            self.time_col, self.allowed_cols, self.timestamps = self.get_timestamps()
+            self.time_col = False
+            self.allowed_cols, self.timestamps = self.init_ds()
             self.fetched_tuples = list()
 
     def get_titles(self):
@@ -46,7 +47,7 @@ class DataStream:
                 del self.data[0]
                 return titles
 
-    def get_timestamps(self):
+    def init_ds(self):
         temp_timestamps = list()
         temp_allowed_cols = list()
         ds = self.data
@@ -56,33 +57,50 @@ class DataStream:
             raise Exception("No time found in file: " + str(self.path))
             # return False
         else:
+            self.time_col = t_index
             for row in ds:
                 size = len(row)
                 for i in range(size):
-                    if i == t_index:
-                        # test for time
-                        t_value = row[t_index]
-                        try:
-                            time_ok, t_stamp = DataStream.test_time(t_value)
-                            if time_ok:
-                                temp_timestamps.append(t_stamp)
-                            else:
-                                raise Exception(str(t_value) + ' : time is invalid for '
-                                                + str(self.path))
-                        except ValueError:
-                            raise Exception(str(t_value) + ' : time is invalid for '
-                                            + str(self.path))
-                    else:
-                        # test for digits
-                        if self.allow_char:
-                            temp_allowed_cols.append(i)
-                        else:
-                            col_value = row[i]
-                            if col_value.replace('.', '', 1).isdigit() or col_value.isdigit():
-                                temp_allowed_cols.append(i)
+                    cols, t_stamp = self.get_time_stamps(i, row)
+                    temp_allowed_cols.append(cols)
+                    temp_timestamps.append(t_stamp)
                     # return False
+            # filter(lambda x: x != None, lis)
             temp_timestamps.sort()
-        return t_index, temp_allowed_cols, temp_timestamps
+            temp_allowed_cols.sort()
+            print(temp_allowed_cols)
+            print(temp_timestamps)
+        return temp_allowed_cols, temp_timestamps
+
+    def get_time_stamps(self, i, row):
+        print("fetching time stamps")
+        stamp = None
+        index = None
+        if self.time_col and i == self.time_col:
+            # test for time
+            t_value = row[i]
+            try:
+                time_ok, t_stamp = DataStream.test_time(t_value)
+                if time_ok:
+                    # temp_timestamps.append(t_stamp)
+                    stamp = t_stamp
+                else:
+                    raise Exception(str(t_value) + ' : time is invalid for '
+                                    + str(self.path))
+            except ValueError:
+                raise Exception(str(t_value) + ' : time is invalid for '
+                                + str(self.path))
+        else:
+            # test for digits
+            if self.allow_char:
+                # temp_allowed_cols.append(i)
+                index = i
+            else:
+                col_value = row[i]
+                if col_value.replace('.', '', 1).isdigit() or col_value.isdigit():
+                    # temp_allowed_cols.append(i)
+                    index = i
+        return index, stamp
 
     @staticmethod
     def get_time_col(row):

@@ -147,13 +147,6 @@ class FuzzTX:
             return False
 
     @staticmethod
-    def check_index(i, value, arr_values):
-        for item in arr_values:
-            if item[i] == value:
-                return True
-        return False
-
-    @staticmethod
     def get_min_diff(arr):
         arr_pop = np.array(arr)
         arr_diff = np.abs(np.diff(arr_pop))
