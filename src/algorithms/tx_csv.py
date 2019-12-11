@@ -20,7 +20,7 @@ from algorithms.datastream.datastream import DataStream
 class FuzzTX:
     # allow user to upload multiple csv files
 
-    def __init__(self, file_paths, allow_char, cores):
+    def __init__(self, file_paths, allow_char, cores, allow_para):
         self.f_paths = FuzzTX.test_paths(file_paths)
         if len(self.f_paths) >= 2:
             if allow_char == 0:
@@ -32,6 +32,11 @@ class FuzzTX:
                 self.cores = cores
             else:
                 self.cores = InitParallel.get_num_cores()
+
+            if allow_para == 0:
+                self.allow_parallel = False
+            else:
+                self.allow_parallel = True
 
             try:
                 self.d_streams = self.get_data_streams()
@@ -54,7 +59,10 @@ class FuzzTX:
         size = len(self.f_paths)
         for i in range(size):
             path = self.f_paths[i]
-            ds = DataStream(i, path, self.allow_char, self.cores)
+            if self.allow_parallel:
+                ds = DataStream(i, path, self.allow_char, self.cores)
+            else:
+                ds = DataStream(i, path, self.allow_char, 0)
             list_ds.append(ds)
         return list_ds
 
@@ -78,9 +86,15 @@ class FuzzTX:
         self.col_size = len(title_tuple)
         arr_slice = list(np.arange(boundaries[1], extremes[1], extremes[2]))
 
-        # fetch value tuples through parallel processors
-        pool = mp.Pool(self.cores)
-        x_data = pool.map(self.slide_timestamp, arr_slice)
+        if self.allow_parallel:
+            # fetch value tuples through parallel processors
+            pool = mp.Pool(self.cores)
+            x_data = pool.map(self.slide_timestamp, arr_slice)
+        else:
+            x_data = list()
+            for _slice in arr_slice:
+                temp_tuple = self.slide_timestamp(_slice)
+                x_data.append(temp_tuple)
         x_data = list(filter(bool, x_data))
         x_data.sort()
         x_data.insert(0, title_tuple)

@@ -21,16 +21,22 @@ from optparse import OptionParser
 from algorithms.tx_csv import FuzzTX
 
 
-def init_algorithm(allow_char, f_paths, cores):
+def init_algorithm(allow_char, f_paths, cores, allow_para):
     try:
-        obj = FuzzTX(f_paths, allow_char, cores)
+        obj = FuzzTX(f_paths, allow_char, cores, allow_para)
         x_data = obj.cross_data()
         FuzzTX.write_csv(x_data)
         # print(x_data)
 
+        if obj.allow_parallel:
+            msg_para = "True"
+        else:
+            msg_para = "False"
+
         wr_line = "Algorithm: FuzzTX \n"
         wr_line += "No. of (crossed data) attributes: " + str(len(x_data[0])) + '\n'
         wr_line += "No. of (crossed data) tuples: " + str(len(x_data)) + '\n'
+        wr_line += "Parallel multi-core execution: " + str(msg_para) + '\n'
         wr_line += ("Number of cores: " + str(obj.cores) + '\n\n')
         wr_line += ("\nFiles: " + f_paths + '\n')
         return wr_line
@@ -75,6 +81,11 @@ if __name__ == "__main__":
                              help='number of cores',
                              default=1,
                              type='int')
+        optparser.add_option('-p', '--allowParallel',
+                             dest='allowPara',
+                             help='allow parallel multiprocessing',
+                             default=0,
+                             type='int')
         (options, args) = optparser.parse_args()
 
         if options.files is None:
@@ -84,10 +95,11 @@ if __name__ == "__main__":
             filePaths = options.files
             allowChar = options.allowChar
             numCores = options.numCores
+            allowPara = options.allowPara
 
     import time
     start = time.time()
-    res_text = init_algorithm(allowChar, filePaths, numCores)
+    res_text = init_algorithm(allowChar, filePaths, numCores, allowPara)
     end = time.time()
 
     wr_text = ("Run-time: " + str(end - start) + " seconds\n")

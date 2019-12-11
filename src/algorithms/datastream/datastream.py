@@ -57,12 +57,18 @@ class DataStream:
             # return False
         else:
             self.time_col = t_index
-
-            # fetch timestamp from every row through parallel processors
-            size = len(data)
-            tasks = range(size)
-            pool = mp.Pool(self.cores)
-            timestamps = pool.map(self.get_time_stamp, tasks)
+            if self.cores > 0:
+                # fetch timestamp from every row through parallel processors
+                size = len(data)
+                tasks = range(size)
+                pool = mp.Pool(self.cores)
+                timestamps = pool.map(self.get_time_stamp, tasks)
+            else:
+                timestamps = list()
+                size = len(data)
+                for i in range(size):
+                    t_stamp = self.get_time_stamp(i)
+                    timestamps.append(t_stamp)
             timestamps.sort()
             allowed_cols.sort()
             print("Finished fetching timestamps")
