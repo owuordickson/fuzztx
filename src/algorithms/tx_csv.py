@@ -36,6 +36,7 @@ class FuzzTX:
             try:
                 self.d_streams = self.get_data_streams()
                 self.size = self.get_size()
+                self.col_size = 0
                 self.boundaries = []
                 # self.data_streams, self.time_list = self.get_observations()
                 print("data streams fetched")
@@ -74,6 +75,7 @@ class FuzzTX:
                 if i in allowed_cols:
                     title_tuple.append(titles[i])
 
+        self.col_size = len(title_tuple)
         arr_slice = list(np.arange(boundaries[1], extremes[1], extremes[2]))
 
         # fetch value tuples through parallel processors
@@ -116,7 +118,7 @@ class FuzzTX:
         # print(arr_index)
         if arr_index:
             temp_tuple = self.fetch_x_tuples(boundaries[1], arr_index)
-            if temp_tuple:
+            if temp_tuple and len(temp_tuple) == self.col_size:
                 return temp_tuple
         return False
 
