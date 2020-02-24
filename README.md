@@ -2,7 +2,7 @@
 
 # FuzzTX
 
-A Python implementation of the **FuzzTX** algorithm. The algorithm applies a fuzzy triangular membership function to cross different unrelated data streams based on their <em>date-time</em> attributes. 
+A Python implementation of the **FuzzTX** algorithm. The algorithm applies a fuzzy triangular membership function to cross time-series data from different and/or unrelated sources based on the *date-time* attributes. 
 <!-- Research paper will appear in the proceedings of  -- link<br> -->
 
 ## Requirements
