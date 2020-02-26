@@ -9,25 +9,27 @@
 
 """
 
-from src import FuzzTXj, HandleData, GradACO
+import json
+# from src import FuzzTXj, HandleData, GradACO
+from algorithms.ogc.tx_json import FuzzTXj
+from algorithms.ogc.init_data import InitData
+from algorithms.ogc.aco_grad import GradACO
 
 
 def init_algorithm():
     try:
         # input_data = get_sample_data()
-        path = '../data/dataset.json'
-        obj = FuzzTXj(path)
+        path = '../../../data/dataset.json'
+        json_data = read_json(path)
+        obj = FuzzTXj(json_data)
         # obj = FuzzTXj(input_data)
         x_data = obj.cross_data()
         # print(obj.observation_list)
         # print(x_data)
 
-        d_set = HandleData(x_data)
+        d_set = InitData(x_data)
         if d_set.data:
-            steps = obj.steps
-            max_combs = obj.combs
-            min_supp = obj.min_sup
-
+            min_sup = 0.5
             list_attr = list()
             for txt in d_set.title:
                 text = str(txt[0]) + '. ' + txt[1]
@@ -37,8 +39,8 @@ def init_algorithm():
             # print("\nFile: " + "none")
 
             d_set.init_attributes(False)
-            ac = GradACO(steps, max_combs, d_set)
-            list_gp = ac.run_ant_colony(min_supp)
+            ac = GradACO(d_set)
+            list_gp = ac.run_ant_colony(min_sup)
             list_gp.sort(key=lambda k: (k[0], k[1]), reverse=True)
             # print("\nPattern : Support")
             list_pattern = list()
@@ -50,14 +52,20 @@ def init_algorithm():
                 # print(var_pattern)
                 plot_data = generate_plot_data(d_set.title, pattern)
                 list_pattern.append(([plot_data, "support:"+str(support)]))
-            figure = GradACO.plot_patterns(list_pattern)
-            print(figure)
+            # figure = GradACO.plot_patterns(list_pattern)
+            # print(figure)
+            print(list_pattern)
             # return figure
             # json_response = json.dumps({"attributes": list_attr, "patterns": list_pattern})
             # print(json_response)
-
     except Exception as error:
         print(error)
+
+
+def read_json(file):
+    with open(file, 'r') as f:
+        temp_data = json.load(f)
+        return temp_data
 
 
 def generate_plot_data(list_title, list_pattern):

@@ -18,7 +18,7 @@ Description:
 import sys
 from optparse import OptionParser
 # from src import FuzzTX
-from algorithms.tx_csv import FuzzTX
+from algorithms.crossing.tx_csv import FuzzTX
 
 
 def init_algorithm(allow_char, f_paths, cores, allow_para):

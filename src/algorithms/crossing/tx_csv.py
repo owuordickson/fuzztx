@@ -13,8 +13,8 @@ from datetime import datetime
 import numpy as np
 import skfuzzy as fuzzy
 import multiprocessing as mp
-from algorithms.datastream.multiprocess import InitParallel
-from algorithms.datastream.datastream import DataStream
+from algorithms.crossing.multiprocess import InitParallel
+from algorithms.crossing.datastream import DataStream
 
 
 class FuzzTX:

@@ -1,30 +1,38 @@
 # -*- coding: utf-8 -*-
 """
-@author: "Dickson Owuor",
-@credits: "Thomas Runkler, Edmond Menya, and Anne Laurent",
-@license: "MIT",
-@version: "1.0",
-@email: "owuordickson@gmail.com",
-@created: "12 July 2019",
-@modified: "14 October 2019",
+@author: "Dickson Owuor"
+@credits: "Thomas Runkler, Edmond Menya, and Anne Laurent"
+@license: "MIT"
+@version: "1.0"
+@email: "owuordickson@gmail.com"
+@created: "12 July 2019"
 
 """
+import csv
+from dateutil.parser import parse
+import time
 import numpy as np
 
 
 class HandleData:
 
-    def __init__(self, raw_data):
-        self.raw_data = raw_data
-        self.data = raw_data
-        self.title = self.get_title()
-        self.attr_index = self.get_attributes()
-        self.column_size = self.get_attribute_no()
-        self.size = self.get_size()
-        self.thd_supp = False
-        self.equal = False
-        self.attr_data = []
-        self.lst_bin = []
+    def __init__(self, file_path):
+        self.raw_data = HandleData.read_csv(file_path)
+        if len(self.raw_data) == 0:
+            self.data = False
+            print("csv file read error")
+            raise Exception("Unable to read csv file")
+        else:
+            print("Data fetched from csv file")
+            self.data = self.raw_data
+            self.title = self.get_title()
+            self.attr_index = self.get_attributes()
+            self.column_size = self.get_attribute_no()
+            self.size = self.get_size()
+            self.thd_supp = False
+            self.equal = False
+            self.attr_data = []
+            self.lst_bin = []
 
     def get_size(self):
         size = len(self.raw_data)
@@ -53,7 +61,7 @@ class HandleData:
 
     def get_attributes(self):
         attr = []
-        time_cols = HandleData.get_time_cols()
+        time_cols = self.get_time_cols()
         for i in range(len(self.title)):
             temp_attr = self.title[i]
             indx = int(temp_attr[0])
@@ -64,12 +72,40 @@ class HandleData:
                 attr.append(temp_attr[0])
         return attr
 
+    def get_time_cols(self):
+        time_cols = list()
+        # for k in range(10, len(self.data[0])):
+        #    time_cols.append(k)
+        # time_cols.append(0)
+        # time_cols.append(1)
+        # time_cols.append(2)
+        # time_cols.append(3)
+        # time_cols.append(4)
+        # time_cols.append(5)
+        # time_cols.append(6)
+        # time_cols.append(7)
+        # time_cols.append(8)
+        # time_cols.append(9)
+        for i in range(len(self.data[0])):  # check every column for time format
+            row_data = str(self.data[0][i])
+            try:
+                time_ok, t_stamp = HandleData.test_time(row_data)
+                if time_ok:
+                    time_cols.append(i)
+            except ValueError:
+                continue
+        if len(time_cols) > 0:
+            return time_cols
+        else:
+            return []
+
     def init_attributes(self, eq):
-        # Arrange rank attributes to generate Graph attribute
+        # (check) implement parallel multiprocessing
+        # re-structure csv data into an array
         self.equal = eq
         temp = self.data
         cols = self.column_size
-        time_cols = HandleData.get_time_cols()
+        time_cols = self.get_time_cols()
         for col in range(cols):
             if len(time_cols) > 0 and (col in time_cols):
                 # exclude date-time column
@@ -83,6 +119,7 @@ class HandleData:
                 self.attr_data.append(attr_data)
 
     def get_bin_rank(self, attr_data, symbol):
+        # execute binary rank to calculate support of pattern
         n = len(attr_data[1])
         incr = tuple([attr_data[0], '+'])
         decr = tuple([attr_data[0], '-'])
@@ -115,8 +152,47 @@ class HandleData:
         return supp, temp_bin
 
     @staticmethod
-    def get_time_cols():
-        time_cols = list()
-        time_cols.append(0)
-        # time_cols.append(1)
-        return time_cols
+    def read_csv(file):
+        # 1. retrieve data-set from file
+        with open(file, 'r') as f:
+            dialect = csv.Sniffer().sniff(f.readline(), delimiters=";,' '\t")
+            f.seek(0)
+            reader = csv.reader(f, dialect)
+            temp = list(reader)
+            f.close()
+        return temp
+
+    @staticmethod
+    def write_file(data, path):
+        with open(path, 'w') as f:
+            f.write(data)
+            f.close()
+
+    @staticmethod
+    def test_time(date_str):
+        # add all the possible formats
+        try:
+            if type(int(date_str)):
+                return False, False
+        except ValueError:
+            try:
+                if type(float(date_str)):
+                    return False, False
+            except ValueError:
+                try:
+                    date_time = parse(date_str)
+                    t_stamp = time.mktime(date_time.timetuple())
+                    return True, t_stamp
+                except ValueError:
+                    raise ValueError('no valid date-time format found')
+
+    @staticmethod
+    def get_timestamp(time_data):
+        try:
+            ok, stamp = HandleData.test_time(time_data)
+            if ok:
+                return stamp
+            else:
+                return False
+        except ValueError:
+            return False
