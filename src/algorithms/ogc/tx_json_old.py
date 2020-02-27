@@ -8,7 +8,8 @@
 @created: "10 October 2019"
 
 """
-import json
+
+from datetime import datetime
 from dateutil.parser import parse
 import time
 import numpy as np
@@ -17,16 +18,8 @@ import skfuzzy as fuzzy
 
 class FuzzTXj:
 
-    def __init__(self, file_path):
-        json_data = FuzzTXj.read_json(file_path)
+    def __init__(self, json_data):
         if "datastreams" in json_data:
-            # true
-            self.pattern = json_data["patternType"]
-            self.min_sup = json_data["minSup"]
-            self.steps = json_data["steps"]
-            self.combs = json_data["combs"]
-            self.ref = json_data["c_ref"]
-            self.rep = json_data["m_rep"]
             self.observation_list, self.time_list = FuzzTXj.get_observations(json_data)
         else:
             raise Exception("Python Error: dataset has no observations")
@@ -99,7 +92,8 @@ class FuzzTXj:
     @staticmethod
     def fetch_x_tuples(time, data, arr_index, list_index):
         temp_tuple = list()
-        temp_tuple.append(time)
+        # temp_tuple.append(time)
+        temp_tuple.append(str(datetime.fromtimestamp(time)))
         for i in range(len(data)):
             index = (arr_index[i] + 1)
             # check if index already appears
@@ -124,13 +118,6 @@ class FuzzTXj:
         arr_pop = np.array(arr)
         arr_diff = np.abs(np.diff(arr_pop))
         return arr_pop.min(), arr_pop.max(), arr_diff.min()
-
-    @staticmethod
-    def read_json(file):
-        # temp_data = []
-         with open(file, 'r') as f:
-            temp_data = json.load(f)
-            return temp_data
 
     @staticmethod
     def get_observations(json_data):

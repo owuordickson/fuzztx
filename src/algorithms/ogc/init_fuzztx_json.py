@@ -11,7 +11,8 @@
 
 import json
 # from src import FuzzTXj, HandleData, GradACO
-from algorithms.ogc.tx_json import FuzzTXj
+# from algorithms.ogc.tx_json import FuzzTXj
+from algorithms.ogc.tx_json_old import FuzzTXj
 from algorithms.ogc.init_data import InitData
 from algorithms.ogc.aco_grad import GradACO
 
@@ -25,7 +26,7 @@ def init_algorithm():
         # obj = FuzzTXj(input_data)
         x_data = obj.cross_data()
         # print(obj.observation_list)
-        # print(x_data)
+        print(x_data)
 
         d_set = InitData(x_data)
         if d_set.data:
@@ -70,7 +71,7 @@ def read_json(file):
 
 def generate_plot_data(list_title, list_pattern):
     plot_data = list()
-    for pattern in list_pattern[:4]:
+    for pattern in list_pattern:
         i = int(pattern[0])
         name = get_attr_name(list_title, i)
         value = 0
