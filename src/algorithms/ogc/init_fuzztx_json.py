@@ -11,8 +11,8 @@
 
 import json
 # from src import FuzzTXj, HandleData, GradACO
-# from algorithms.ogc.tx_json import FuzzTXj
-from algorithms.ogc.tx_json_old import FuzzTXj
+from algorithms.ogc.tx_json import FuzzTXj
+# from algorithms.ogc.tx_json_old import FuzzTXj
 from algorithms.ogc.init_data import InitData
 from algorithms.ogc.aco_grad import GradACO
 

@@ -73,7 +73,8 @@ class FuzzTXj:
             if (max_time == 0) or (temp_max > max_time):
                 max_time = temp_max
         extremes = [min_time, max_time, max_diff]
-        return np.array(max_boundary), extremes
+        #return np.array(max_boundary), extremes
+        return max_boundary, extremes
 
     @staticmethod
     def approx_fuzzy_index(all_pop, boundaries):
