@@ -3,7 +3,7 @@
 # FuzzTX
 
 A Python implementation of the **FuzzTX** (Fuzzy Temporal Crossing) algorithm. The algorithm applies a fuzzy triangular membership function to cross time-series data from different and/or unrelated sources based on the *date-time* attributes. 
-Research paper was accepted as a conference paper at the 2020 ADBIS, TPDL & EDA joint conferences and, it will be published in the Springer CCIS series (Communications in Computer and Information Science - ISSN: 1865-0929).
+Research paper was accepted as a conference paper at the 2020 ADBIS, TPDL & EDA joint conferences and, it will be published in the Proceedings of Springer CCIS series (Communications in Computer and Information Science - ISSN: 1865-0929).
 
 ## Requirements
 
