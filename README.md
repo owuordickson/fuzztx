@@ -24,7 +24,7 @@ You will be required to install the following python dependencies before using *
 Use it a command line program with the local package:
 
 ``` shell
-$python3 init_fuzztx_csv.py -a allowChar -f 'file1.csv,file2.csv,file3.csv'
+$python3 src/init_fuzztx_csv.py -a allowChar -f 'file1.csv,file2.csv,file3.csv'
 ```
 
 where you specify the input parameters as follows:
@@ -36,7 +36,7 @@ where you specify the input parameters as follows:
 For example we executed the **FuzzTX** algorithm on sample data-sets
 
 ``` shell
-$python3 init_fuzztx_csv.py -a 0 -f '../data/oreme/GPS.csv,../data/oreme/Omnidir.csv'
+$python3 src/init_fuzztx_csv.py -a 0 -f '../data/oreme/GPS.csv,../data/oreme/Omnidir.csv'
 ```
 
 ### Output
