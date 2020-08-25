@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/owuordickson/data-crossing.svg?branch=master)](https://travis-ci.org/owuordickson/data-crossing)
+[![Build Status](https://travis-ci.org/owuordickson/fuzztx.svg?branch=master)](https://travis-ci.org/owuordickson/fuzztx)
 
 # FuzzTX
 
