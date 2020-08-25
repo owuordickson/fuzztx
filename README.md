@@ -5,7 +5,7 @@
 A Python implementation of the **FuzzTX** (Fuzzy Temporal Crossing) algorithm. The algorithm applies a fuzzy triangular membership function to cross time-series data from different and/or unrelated sources based on the *date-time* attributes. 
 Research paper was accepted as a conference paper at the 2020 ADBIS, TPDL & EDA joint conferences: 
 
-Owuor D.O., Laurent A., Orero J.O. (2020) Exploiting IoT Data Crossings for Gradual Pattern Mining Through Parallel Processing. In: Bellatreche L. et al. (eds) ADBIS, TPDL and EDA 2020 Common Workshops and Doctoral Consortium. TPDL 2020, ADBIS 2020. Communications in Computer and Information Science, vol 1260. Springer, Cham. https://doi.org/10.1007/978-3-030-55814-7_9
+* Owuor D.O., Laurent A., Orero J.O. (2020) Exploiting IoT Data Crossings for Gradual Pattern Mining Through Parallel Processing. In: Bellatreche L. et al. (eds) ADBIS, TPDL and EDA 2020 Common Workshops and Doctoral Consortium. TPDL 2020, ADBIS 2020. Communications in Computer and Information Science, vol 1260. Springer, Cham. https://doi.org/10.1007/978-3-030-55814-7_9
 
 
 ## Requirements
